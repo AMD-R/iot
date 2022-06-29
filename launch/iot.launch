@@ -1,0 +1,16 @@
+<launch>
+	
+    <node name="gpspub" pkg="iot" type="gps_pub.py" />
+    
+    <node name="velpub" pkg="iot" type="velocity_pub.py" />
+    
+    <node name="serial_node" pkg="rosserial_arduino" type="serial_node.py">
+    	<param name="port" value="/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0"/>
+	<param name="baud" value="115200" />
+    </node>
+    
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" > 
+        <arg name="port" value="9090"/>
+    </include>
+    
+</launch>
