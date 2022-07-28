@@ -1,5 +1,5 @@
 <launch>
     <node name="httppub" pkg="iot" type="http_pub.py">
-        <param name="config" value="$(find_package iot)/cfg/server.yml">
+        <param name="config" value="$(find iot)/cfg/server.yml" />
     </node>
 </launch>

@@ -43,6 +43,7 @@ def start_server(host: str, port: int, private_key: str, key_password) -> (
 
 if __name__ == '__main__':
     # https://answers.ros.org/question/109761/where-to-download-extra-files-needed-at-runtime/
+    # https://answers.ros.org/question/143281/where-should-i-put-configuration-files/
     with open('../cfg/server.yml', 'r') as f:
         data = yaml.safe_load(f)
         key = '../cfg/' + data['private_key']
