@@ -51,7 +51,7 @@ if __name__ == '__main__':
     with open(config, 'r') as f:
         data = yaml.safe_load(f)
         key_dir = os.path.dirname(config)
-        key = os.join(key_dir, data['private_key'])
+        key = os.path.join(key_dir, data['private_key'])
 
     try:
         start_server(data['host'], data['port'], key, data['password'])
