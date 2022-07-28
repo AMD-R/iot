@@ -50,7 +50,7 @@ if __name__ == '__main__':
     config = rospy.get_param('/httppub/config')
     with open(config, 'r') as f:
         data = yaml.safe_load(f)
-        key_dir = os.path.pardir(config)
+        key_dir = os.path.dirname(config)
         key = key_dir + data['private_key']
 
     try:
