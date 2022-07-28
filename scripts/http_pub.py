@@ -3,6 +3,8 @@ import requests
 import yaml
 import random
 import datetime
+import rospy
+import os
 from typing import NoReturn
 from cryptography_scripts import import_private, sign_message
 
@@ -44,9 +46,12 @@ def start_server(host: str, port: int, private_key: str, key_password) -> (
 if __name__ == '__main__':
     # https://answers.ros.org/question/109761/where-to-download-extra-files-needed-at-runtime/
     # https://answers.ros.org/question/143281/where-should-i-put-configuration-files/
-    with open('../cfg/server.yml', 'r') as f:
+    rospy.init_node("http_pub")
+    config = rospy.get_param('/httppub/config')
+    with open(config, 'r') as f:
         data = yaml.safe_load(f)
-        key = '../cfg/' + data['private_key']
+        key_dir = os.path.pardir(config)
+        key = key_dir + data['private_key']
 
     try:
         start_server(data['host'], data['port'], key, data['password'])
