@@ -20,3 +20,17 @@ password: 'password'
 ## Verbose
 The verbose parameter can be set to `1` or `0` to determine if change the verbosity of the node
 (Logging what data it is sending). A value of `1` means it will verbose the message send and `0` will not.
+
+# Usage
+## IOT
+To run all the nodes required for the IOT part of the AMD-R run:
+``` sh
+roslaunch iot iot.launch
+```
+
+## HTTP Client
+To only run the node for http client run:
+
+``` sh
+roslaunch iot http.launch
+```
