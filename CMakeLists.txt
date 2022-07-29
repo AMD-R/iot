@@ -166,7 +166,7 @@ include_directories(
 #   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 # )
 
-catkin_install_python(PROGRAMS scripts/gps_pub.py scripts/battery_pub.py
+catkin_install_python(PROGRAMS scripts/gps_pub.py scripts/battery_pub.py scripts/http_pub.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

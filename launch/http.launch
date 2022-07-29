@@ -1,5 +1,6 @@
 <launch>
     <node name="httppub" pkg="iot" type="http_pub.py" output="screen">
         <param name="config" value="$(find iot)/cfg/server.yml" />
+        <param name="verbose" value="1" />
     </node>
 </launch>
