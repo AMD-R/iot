@@ -8,6 +8,21 @@ import os
 import sys
 from typing import NoReturn
 from cryptography_scripts import import_private, sign_message
+from sensor_msgs.msg import NavSatFix
+from std_msgs.msg import Float32
+
+
+def battery_callback(data: Float32):
+    """Callback Function for battery_percentage topic."""
+    global battery
+    battery = data
+
+
+def gps_callback(data: NavSatFix):
+    """Callback Function for iot/gps topic."""
+    global gps
+    gps['lat'] = data.lat
+    gps['lon'] = data.lon
 
 
 def start_server(host: str, port: int, private_key: str, key_password: str,
@@ -28,17 +43,27 @@ def start_server(host: str, port: int, private_key: str, key_password: str,
     """
     rate = rospy.Rate(1)
 
+    # Setting subscriber
+    rospy.Subscriber("battery_percentage", Float32, battery_callback)
+    rospy.Subscriber("iot/gps", NavSatFix, gps_callback)
+
     if key_password:
         key_password = bytes(key_password, 'utf-8')
     url = host + ":" + str(port) + '/api/amd-r/subscriber'
 
+    # Setting intitial dummy values
+    global battery
+    global gps
+    battery = 0
+    gps = {
+        'lat': 0,
+        'lon': 0
+    }
+
     while not rospy.is_shutdown():
         data = {
-            'gps': {
-                'lat': random.random() * (2.95 - 2.94) + 2.94,
-                'lon': random.random() * (101.875 - 101.874) + 101.874,
-            },
-            'battery': random.random() * 100,
+            'gps': gps,
+            'battery': battery,
             'speed': random.random() * (2 - 0) + 0,
             'mission': random.random(),
             'Time': datetime.datetime.now().isoformat()
