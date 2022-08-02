@@ -8,14 +8,14 @@ import os
 import sys
 from typing import NoReturn
 from cryptography_scripts import import_private, sign_message
-from sensor_msgs.msg import NavSatFix
+from sensor_msgs.msg import NavSatFix, BatteryState
 from std_msgs.msg import Float32
 
 
-def battery_callback(data: Float32):
+def battery_callback(data: BatteryState):
     """Callback Function for battery_percentage topic."""
     global battery
-    battery = data
+    battery = data.percentage
 
 
 def gps_callback(data: NavSatFix):
@@ -44,7 +44,7 @@ def start_server(host: str, port: int, private_key: str, key_password: str,
     rate = rospy.Rate(1)
 
     # Setting subscriber
-    rospy.Subscriber("battery_percentage", Float32, battery_callback)
+    rospy.Subscriber("battery_percentage", BatteryState, battery_callback)
     rospy.Subscriber("iot/gps", NavSatFix, gps_callback)
 
     if key_password:
