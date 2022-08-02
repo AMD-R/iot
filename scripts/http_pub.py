@@ -20,8 +20,8 @@ def battery_callback(data: BatteryState):
 def gps_callback(data: NavSatFix):
     """Callback Function for iot/gps topic."""
     global gps
-    gps['lat'] = data.lat
-    gps['lon'] = data.lon
+    gps['lat'] = data.latitude
+    gps['lon'] = data.longitude
 
 
 def velocity_callback(data: Float32):
