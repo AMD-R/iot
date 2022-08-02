@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import requests
 import yaml
-import random
 import datetime
 import rospy
 import os
@@ -9,7 +8,7 @@ import sys
 from typing import NoReturn
 from cryptography_scripts import import_private, sign_message
 from sensor_msgs.msg import NavSatFix, BatteryState
-from std_msgs.msg import Float32
+from std_msgs.msg import Float32, String
 
 
 def battery_callback(data: BatteryState):
@@ -23,6 +22,18 @@ def gps_callback(data: NavSatFix):
     global gps
     gps['lat'] = data.lat
     gps['lon'] = data.lon
+
+
+def velocity_callback(data: Float32):
+    """Callback Function for iot/velocity topic."""
+    global velocity
+    velocity = data.data
+
+
+def mission_callback(data: String):
+    """Callback Function for iot/mission topic."""
+    global mission
+    mission = data.data
 
 
 def start_server(host: str, port: int, private_key: str, key_password: str,
@@ -46,6 +57,8 @@ def start_server(host: str, port: int, private_key: str, key_password: str,
     # Setting subscriber
     rospy.Subscriber("battery_percentage", BatteryState, battery_callback)
     rospy.Subscriber("iot/gps", NavSatFix, gps_callback)
+    rospy.Subscriber("iot/velocity", Float32, velocity_callback)
+    rospy.Subscriber("iot/mission", String, mission_callback)
 
     if key_password:
         key_password = bytes(key_password, 'utf-8')
@@ -54,18 +67,22 @@ def start_server(host: str, port: int, private_key: str, key_password: str,
     # Setting intitial dummy values
     global battery
     global gps
+    global velocity
+    global mission
     battery = 0
     gps = {
         'lat': 0,
         'lon': 0
     }
+    velocity = 0
+    mission = "None"
 
     while not rospy.is_shutdown():
         data = {
             'gps': gps,
             'battery': battery,
-            'speed': random.random() * (2 - 0) + 0,
-            'mission': random.random(),
+            'speed': velocity,
+            'mission': mission,
             'Time': datetime.datetime.now().isoformat()
         }
         message = bytes(str(data).replace(" ", "").replace("'", '"'), 'utf-8')
