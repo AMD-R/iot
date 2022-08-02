@@ -99,6 +99,7 @@ def start_server(host: str, port: int, private_key: str, key_password: str,
         # Sending Data
         try:
             post = requests.post(url, json=data)
+            rospy.loginfo(post.text)
         except requests.ConnectionError:
             rospy.logerr("Unable to connect to server. Please Ensure the host "
                          "and port is correct or the server is up."
