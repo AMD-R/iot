@@ -85,12 +85,16 @@ def start_server(host: str, port: int, private_key: str, key_password: str,
             'mission': mission,
             'Time': datetime.datetime.now().isoformat()
         }
-        message = bytes(str(data).replace(" ", "").replace("'", '"'), 'utf-8')
+        data = str(data)
+        message = {
+            'data': data
+        }
+        data = bytes(data, 'utf-8')
 
         key = import_private(private_key, key_password)
-        signature = sign_message(key, message)
-        data['signature'] = signature.hex()
-        data['name'] = 'Test AMD-R'
+        signature = sign_message(key, data)
+        message['signature'] = signature.hex()
+        message['name'] = 'Test AMD-R'
 
         # Logging message
         if verbose:
