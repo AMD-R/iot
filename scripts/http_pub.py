@@ -5,6 +5,7 @@ import datetime
 import rospy
 import os
 import sys
+import json
 from typing import NoReturn
 from cryptography_scripts import import_private, sign_message
 from sensor_msgs.msg import NavSatFix, BatteryState
@@ -85,7 +86,7 @@ def start_server(host: str, port: int, private_key: str, key_password: str,
             'mission': mission,
             'Time': datetime.datetime.now().isoformat()
         }
-        data = str(data)
+        data = json.dumps(data)
         message = {
             'data': data
         }
@@ -98,11 +99,11 @@ def start_server(host: str, port: int, private_key: str, key_password: str,
 
         # Logging message
         if verbose:
-            rospy.loginfo("Sending: " + str(data))
+            rospy.loginfo("Sending: " + json.dumps(message))
 
         # Sending Data
         try:
-            post = requests.post(url, json=data)
+            post = requests.post(url, json=message)
             rospy.loginfo(post.text)
         except requests.ConnectionError:
             rospy.logerr("Unable to connect to server. Please Ensure the host "
