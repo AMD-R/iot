@@ -30,6 +30,6 @@
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>python3-requests</exec_depend>
   <exec_depend>python3-cryptography</exec_depend>
-  <exec_depend>python3-yaml</exec_depend>
+  <exec_depend>python3-pyyaml</exec_depend>
 
 </package>
