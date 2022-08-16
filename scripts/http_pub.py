@@ -37,6 +37,18 @@ def mission_callback(data: String):
     mission = data.data
 
 
+def drawer_callback(data: String):
+    """Callback Function for iot/drawer topic."""
+    global drawer
+    drawer = {
+        'one': data.drawer_one_username,
+        'two': data.drawer_two_username,
+        'three': data.drawer_three_username,
+        'four': data.drawer_four_username,
+        'five': data.drawer_five_username
+    }
+
+
 def start_server(host: str, port: int, private_key: str, key_password: str,
                  verbose: bool = True) -> NoReturn:
     """Starts the http client.
@@ -60,6 +72,7 @@ def start_server(host: str, port: int, private_key: str, key_password: str,
     rospy.Subscriber("iot/gps", NavSatFix, gps_callback)
     rospy.Subscriber("iot/velocity", Float32, velocity_callback)
     rospy.Subscriber("iot/mission", String, mission_callback)
+    rospy.Subscriber("iot/drawer", String, mission_callback)
 
     if key_password:
         key_password = bytes(key_password, 'utf-8')
@@ -70,6 +83,7 @@ def start_server(host: str, port: int, private_key: str, key_password: str,
     global gps
     global velocity
     global mission
+    global drawer
     battery = 0
     gps = {
         'lat': 0,
@@ -77,6 +91,13 @@ def start_server(host: str, port: int, private_key: str, key_password: str,
     }
     velocity = 0
     mission = "None"
+    drawer = {
+        'one': "",
+        'two': "",
+        'three': "",
+        'four': "",
+        'five': ""
+    }
 
     while not rospy.is_shutdown():
         data = {
@@ -84,6 +105,7 @@ def start_server(host: str, port: int, private_key: str, key_password: str,
             'battery': battery,
             'speed': velocity,
             'mission': mission,
+            'drawer': drawer,
             'Time': datetime.datetime.now().isoformat()
         }
         data = json.dumps(data)
